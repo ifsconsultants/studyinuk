@@ -216,6 +216,26 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
 .consent button{font:700 .95rem var(--body);padding:11px 20px;border-radius:999px;cursor:pointer;min-height:44px}
 .consent .yes{background:var(--navy);color:#fff;border:2px solid var(--navy)}
 .consent .no{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+
+.ifs-reviews{margin-top:2.5rem;text-align:center}
+.ifs-reviews h3{font:700 clamp(1.6rem,4vw,2.4rem) var(--head);margin:0;color:var(--navy)}
+.ifs-review-window{margin:1.25rem 0;overflow-x:auto}
+.ifs-review-track,.ifs-review-set{display:flex;width:max-content}
+.ifs-review-set{gap:1rem;padding-right:1rem}
+.ifs-review{width:min(78vw,19rem);padding:1.3rem;text-align:left;border:1px solid var(--line);border-radius:14px;background:#fff}
+.ifs-review h4{margin:0;color:var(--navy)}
+.ifs-review small{color:var(--muted)}
+.ifs-review p{margin:.7rem 0 0}
+.ifs-review-copy{display:none}
+.ifs-reviews button{padding:.5rem .8rem;margin-right:.8rem;border:1px solid var(--line);border-radius:8px;background:white;color:var(--navy);font:inherit;cursor:pointer}
+@keyframes ifs-review-scroll{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:no-preference){
+.ifs-moving .ifs-review-window{overflow:hidden}
+.ifs-moving .ifs-review-copy{display:flex}
+.ifs-moving .ifs-review-track{animation:ifs-review-scroll 60s linear infinite}
+.ifs-moving:hover .ifs-review-track,.ifs-moving:focus-within .ifs-review-track,.ifs-paused .ifs-review-track{animation-play-state:paused}
+}
+@media(prefers-reduced-motion:reduce){#review-motion{display:none}}
 </style>
 </head>
 <body>
@@ -262,7 +282,11 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
       <div id="formWrap">
         <h2 id="formTitle">Get your free UK study plan</h2>
         <p class="form-intro">Takes about a minute. A counsellor will contact you within 1 working day.</p>
-        <form id="leadForm" novalidate aria-labelledby="formTitle">
+        <form name="uk-2027-enquiry" method="POST" action="/" data-netlify="true" netlify-honeypot="company_website" id="leadForm" novalidate aria-labelledby="formTitle">
+          <input type="hidden" name="form-name" value="uk-2027-enquiry">
+          <input type="hidden" name="phone_full" value="">
+          <input type="hidden" name="page" value="UK 2027 campaign landing page">
+          <input type="hidden" name="submission_id" value="">
           <div class="field">
             <label for="name">Full name <span class="req" aria-hidden="true">*</span></label>
             <input type="text" id="name" name="full_name" autocomplete="name" required aria-required="true" aria-describedby="err-name">
@@ -553,6 +577,16 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
       <div class="stat"><b>2001</b><span>Guiding students since</span></div>
       <div class="stat"><b>22</b><span>Study destinations supported</span></div>
     </div>
+    <div id="google-reviews" class="ifs-reviews">
+      <h3>Google reviews of IFS Vizag</h3>
+      <p>Highlights from student reviews published on Trustindex.</p>
+      <div class="ifs-review-window"><div class="ifs-review-track">
+        <div class="ifs-review-set"><article class="ifs-review"><h4>Sayak Chakraborty</h4><small>1 August 2025</small><p>Sayak appreciated the patient guidance he received while choosing universities and preparing for his visa.</p></article><article class="ifs-review"><h4>Yasaswini Yashu</h4><small>29 July 2025</small><p>Yasaswini highlighted the help with shortlisting, payments and keeping track of university emails.</p></article><article class="ifs-review"><h4>Mohammad Sufiyaan Khan</h4><small>30 July 2025</small><p>Mohammad valued course recommendations that took his academic background and career goals into account.</p></article><article class="ifs-review"><h4>Vishal Reddy</h4><small>13 June 2025</small><p>Vishal described how regular follow-ups and practice interviews helped him feel more confident.</p></article></div>
+        <div class="ifs-review-set ifs-review-copy" aria-hidden="true"><article class="ifs-review"><h4>Sayak Chakraborty</h4><small>1 August 2025</small><p>Sayak appreciated the patient guidance he received while choosing universities and preparing for his visa.</p></article><article class="ifs-review"><h4>Yasaswini Yashu</h4><small>29 July 2025</small><p>Yasaswini highlighted the help with shortlisting, payments and keeping track of university emails.</p></article><article class="ifs-review"><h4>Mohammad Sufiyaan Khan</h4><small>30 July 2025</small><p>Mohammad valued course recommendations that took his academic background and career goals into account.</p></article><article class="ifs-review"><h4>Vishal Reddy</h4><small>13 June 2025</small><p>Vishal described how regular follow-ups and practice interviews helped him feel more confident.</p></article></div>
+      </div></div>
+      <button type="button" id="review-motion" hidden>Pause scrolling</button>
+      <a href="https://www.trustindex.io/reviews/www.ifsconsultants.in" target="_blank" rel="noopener">Read the full reviews on Trustindex</a>
+    </div>
   </div>
 </section>
 
@@ -763,7 +797,7 @@ var CONFIG = {
 
     $("submitted_at").value = new Date().toISOString();
     var data = {};
-    new FormData(form).forEach(function (v, k) { if (k !== "company_website") data[k] = v; });
+    new FormData(form).forEach(function (v, k) { data[k] = v; });
     var cc = $("cc").value;
     data.phone_full = (cc === "other" ? "" : cc) + data.phone.replace(/[^\d+]/g, "");
     data.consent_marketing = $("marketing").checked ? "yes" : "no";
@@ -772,9 +806,9 @@ var CONFIG = {
     submissionId = submissionId || crypto.randomUUID();
     data.submission_id = submissionId;
     btn.disabled = true; btn.textContent = "Sending…";
-    fetch("/api/enquiry", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
-      .then(async function (r) {
-        if (!r.ok || (await r.json()).saved !== true) throw new Error("Save failed");
+    fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(data).toString() })
+      .then(function (r) {
+        if (!r.ok) throw new Error("Save failed");
         showSuccess();
         fireConversion();
       })
@@ -792,6 +826,18 @@ var CONFIG = {
     $("formSuccess").focus();
     $("enquire").scrollIntoView({ block: "center" });
   }
+})();
+</script>
+<script>
+(function () {
+  const section = document.getElementById("google-reviews");
+  const button = document.getElementById("review-motion");
+  section.classList.add("ifs-moving");
+  button.hidden = false;
+  button.addEventListener("click", function () {
+    const paused = section.classList.toggle("ifs-paused");
+    button.textContent = paused ? "Resume scrolling" : "Pause scrolling";
+  });
 })();
 </script>
 </body>
