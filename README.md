@@ -6,3 +6,5 @@
 4. Submit one enquiry on the live URL, then open Forms → uk-2027-enquiry to view the submitted details. The form keeps contact consent, optional marketing consent and campaign attribution with each enquiry.
 
 No environment variables are required for form delivery.
+
+Appointment requests appear in uk-2027-enquiry. Look for request_type and preferred_appointment_ist. Contact the student to confirm the time.
