@@ -65,7 +65,7 @@ section{padding:56px 0;scroll-margin-top:70px}
 .site-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
 .site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);font:700 1.15rem var(--head)}
-.brand .ph{width:44px;height:44px;font-size:.6rem;padding:2px}
+.brand .ifs-logo{display:block;width:clamp(66px,8vw,88px);height:auto;background:white}
 .site-header .btn{padding:10px 18px;min-height:44px;font-size:.95rem}
 .header-phone{display:none;font-weight:700;color:var(--navy);text-decoration:none}
 @media (min-width:700px){.header-phone{display:inline}}
@@ -95,7 +95,7 @@ section{padding:56px 0;scroll-margin-top:70px}
 label,legend{display:block;font-weight:700;font-size:.95rem;margin-bottom:5px;color:var(--navy)}
 .req{color:var(--error)}
 .opt{font-weight:400;color:var(--muted);font-size:.85rem}
-input[type=text],input[type=email],input[type=tel],select{width:100%;font:1rem var(--body);padding:12px;border:1.5px solid #9AA9C4;border-radius:10px;background:#fff;color:var(--ink);min-height:48px}
+input[type=text],input[type=email],input[type=tel],input[type=datetime-local],select{width:100%;font:1rem var(--body);padding:12px;border:1.5px solid #9AA9C4;border-radius:10px;background:#fff;color:var(--ink);min-height:48px}
 input:focus,select:focus{border-color:var(--blue);outline:3px solid rgba(31,95,191,.25);outline-offset:0}
 .phone{display:grid;grid-template-columns:118px 1fr;gap:8px}
 [aria-invalid=true]{border-color:var(--error)!important;background:#FFF6F5}
@@ -247,10 +247,10 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
     <a class="brand" href="#top" aria-label="IFS Consultants home">
       
       
-      <span>IFS Consultants</span>
+      <img class="ifs-logo" src="assets/ifs-logo.png" alt="IFS Consultants">
     </a>
     
-    <a class="header-phone" href="tel:+919502607058">Call: +91 95026 07058</a>
+    <a class="header-phone" href="tel:+917036319256">Call: +91 70363 19256</a>
     <a class="btn btn-cta" href="#enquire" data-cta="header">Free Counselling</a>
   </div>
 </header>
@@ -272,7 +272,7 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
         <li><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#FFC72C"/><path d="M5.5 10.3l3 3 6-6.3" stroke="#071C3F" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Clear advice on working during and after your studies</span></li>
       </ul>
       <div class="hero-ctas">
-        <a class="btn btn-cta" href="#enquire" data-cta="hero">Book Free Counselling</a>
+        <a class="btn btn-cta" href="#appointment-choice" data-appointment>Book an appointment</a>
         <a class="btn btn-ghost" href="#work">Study &amp; work in the UK</a>
       </div>
     </div>
@@ -287,6 +287,19 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
           <input type="hidden" name="phone_full" value="">
           <input type="hidden" name="page" value="UK 2027 campaign landing page">
           <input type="hidden" name="submission_id" value="">
+          <div class="field" id="appointment-choice" style="scroll-margin-top:90px">
+            <label for="requestKind">How can we help?</label>
+            <select name="request_type" id="requestKind">
+              <option value="General enquiry">Get a free UK study plan</option>
+              <option value="Appointment request">Request a counselling appointment</option>
+            </select>
+          </div>
+          <div class="field" id="appointmentFields" hidden>
+            <label for="appointmentTime">Preferred appointment date and time (IST) *</label>
+            <input type="datetime-local" name="preferred_appointment_ist" id="appointmentTime" disabled aria-describedby="appointmentHint err-appointmentTime">
+            <small id="appointmentHint">Choose a time in India Standard Time. A counsellor will contact you to confirm availability.</small>
+            <div class="err" id="err-appointmentTime" role="alert"></div>
+          </div>
           <div class="field">
             <label for="name">Full name <span class="req" aria-hidden="true">*</span></label>
             <input type="text" id="name" name="full_name" autocomplete="name" required aria-required="true" aria-describedby="err-name">
@@ -358,18 +371,7 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
             <label for="course">Preferred course or subject area</label>
             <input type="text" id="course" name="preferred_course" placeholder="e.g. MSc Data Science, MBA, Nursing">
           </div>
-          <div class="row two">
-            <div class="field">
-              <label for="budget">Budget range <span class="opt">(optional)</span></label>
-              
-              <select id="budget" name="budget_range">
-                <option value="">Prefer not to say</option>
-                <option>Under ₹15 lakh</option>
-                <option>₹15–25 lakh</option>
-                <option>₹25–35 lakh</option>
-                <option>Above ₹35 lakh</option>
-              </select>
-            </div>
+          <div class="row">
             <div class="field">
               <label for="method">Preferred contact method</label>
               <select id="method" name="contact_method">
@@ -427,8 +429,8 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
       <div id="formSuccess" class="success" hidden tabindex="-1" role="status" aria-live="polite">
         <div class="tick"><svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#12704A" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <h3>Thank you, <span id="successName">we have your details</span>!</h3>
-        <p>Your enquiry has been received. An IFS counsellor will contact you within 1 working day using your preferred method.</p>
-        <p><a href="tel:+919502607058">Call the Vizag office</a></p>
+        <p id="successMessage">Your enquiry has been received. An IFS counsellor will contact you within 1 working day using your preferred method.</p>
+        <p><a href="tel:+917036319256">Call IFS Vizag at +91 70363 19256</a></p>
         
       </div>
     </div>
@@ -629,7 +631,7 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
         <p>Study abroad guidance since 2001.<br>Head office: Visakhapatnam, Andhra Pradesh, India.</p>
         
         <p>
-        Phone: <a href="tel:+919502607058">+91 95026 07058</a><br>
+        Phone: <a href="tel:+917036319256">+91 70363 19256</a><br>
         Email: <a href="mailto:info@ifsconsultants.in">info@ifsconsultants.in</a></p>
       </div>
       <div>
@@ -768,7 +770,37 @@ var CONFIG = {
 
   /* ---------- Form validation + submit ---------- */
   var form = $("leadForm"), btn = $("submitBtn"), status = $("formStatus");
+  function wantsAppointment() { return $("requestKind").value === "Appointment request"; }
+  function istMinute() {
+    return new Date(Date.now() + 330 * 60000).toISOString().slice(0, 16);
+  }
+  function configureAppointment() {
+    var active = wantsAppointment();
+    var field = $("appointmentTime");
+    $("appointmentFields").hidden = !active;
+    field.disabled = !active;
+    field.required = active;
+    field.min = istMinute();
+    field.removeAttribute("aria-invalid");
+    $("err-appointmentTime").textContent = "";
+    btn.textContent = active ? "Request appointment" : "Get My Free Counselling";
+  }
+  $("requestKind").addEventListener("change", configureAppointment);
+  document.querySelector("[data-appointment]").addEventListener("click", function (e) {
+    e.preventDefault();
+    if ($("formWrap").hidden) { $("formSuccess").scrollIntoView(); $("formSuccess").focus(); return; }
+    $("requestKind").value = "Appointment request";
+    configureAppointment();
+    $("appointment-choice").scrollIntoView();
+    $("appointmentTime").focus({preventScroll:true});
+  });
+  configureAppointment();
   var rules = {
+    appointmentTime: function (v) {
+      if (!wantsAppointment()) return "";
+      if (!v) return "Choose your preferred date and time.";
+      return v > istMinute() ? "" : "Choose a future time in IST.";
+    },
     name: function (v) { return v.trim().length >= 2 ? "" : "Please enter your full name."; },
     email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? "" : "Please enter a valid email address."; },
     phone: function (v) { var d = v.replace(/\D/g, ""); return /^\+?[\d ()-]+$/.test(v.trim()) && d.length >= 6 && (d.length + ($("cc").value === "other" ? 0 : $("cc").value.length - 1)) <= 15 ? "" : "Please enter a valid phone number (digits only)."; },
@@ -805,20 +837,26 @@ var CONFIG = {
 
     submissionId = submissionId || crypto.randomUUID();
     data.submission_id = submissionId;
+    var requestedTime = wantsAppointment() ? $("appointmentTime").value : "";
     btn.disabled = true; btn.textContent = "Sending…";
     fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(data).toString() })
       .then(function (r) {
         if (!r.ok) throw new Error("Save failed");
-        showSuccess();
+        showSuccess(requestedTime);
         fireConversion();
       })
       .catch(function () {
-        btn.disabled = false; btn.textContent = "Get My Free Counselling";
-        status.textContent = "We could not confirm your enquiry. Please retry, or call +91 95026 07058.";
+        btn.disabled = false; configureAppointment();
+        status.textContent = "We could not confirm your enquiry. Please retry, or call +91 70363 19256.";
       });
   });
 
-  function showSuccess() {
+  function showSuccess(requestedTime) {
+    if (requestedTime) {
+      var date = new Date(requestedTime + ":00+05:30");
+      var label = date.toLocaleString("en-IN", { timeZone:"Asia/Kolkata", dateStyle:"medium", timeStyle:"short" });
+      $("successMessage").textContent = "We received your appointment request for " + label + " IST. An IFS counsellor will contact you to confirm availability.";
+    }
     var first = $("name").value.trim().split(/\s+/)[0];
     if (first) $("successName").textContent = first;
     $("formWrap").hidden = true; $("formSuccess").hidden = false;
