@@ -566,7 +566,7 @@ details .ans{overflow:hidden}
       </div>
       <div id="formSuccess" class="success" hidden tabindex="-1" role="status" aria-live="polite">
         <div class="tick"><svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#12704A" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <h3>Thank you, <span id="successName">we have your details</span>!</h3>
+        <h3>Thank you for your interest in studying in the UK!</h3>
         <p id="successMessage">Your enquiry has been received. An IFS counsellor will contact you within 1 working day using your preferred method.</p>
         <p><a href="tel:+917036319256">Call IFS Vizag at +91 70363 19256</a></p>
         
@@ -1010,13 +1010,15 @@ var CONFIG = {
   });
 
   function showSuccess(requestedTime) {
+    var first = $("name").value.trim().split(/\s+/)[0];
+    var hi = first ? "Hi " + first + ", " : "";
+    var msg = "your enquiry has been received. An IFS counsellor will contact you within 1 working day using your preferred method.";
     if (requestedTime) {
       var date = new Date(requestedTime + ":00+05:30");
       var label = date.toLocaleString("en-IN", { timeZone:"Asia/Kolkata", dateStyle:"medium", timeStyle:"short" });
-      $("successMessage").textContent = "We received your appointment request for " + label + " IST. An IFS counsellor will contact you to confirm availability.";
+      msg = "we received your appointment request for " + label + " IST. An IFS counsellor will contact you to confirm availability.";
     }
-    var first = $("name").value.trim().split(/\s+/)[0];
-    if (first) $("successName").textContent = first;
+    $("successMessage").textContent = hi ? hi + msg : msg.charAt(0).toUpperCase() + msg.slice(1);
     $("formWrap").hidden = true; $("formSuccess").hidden = false;
     sticky.style.display = "none";
     $("formSuccess").focus();
