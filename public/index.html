@@ -217,17 +217,25 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
 .consent .yes{background:var(--navy);color:#fff;border:2px solid var(--navy)}
 .consent .no{background:#fff;color:var(--navy);border:2px solid var(--navy)}
 
-.ifs-reviews{margin-top:2.5rem;text-align:center}
-.ifs-reviews h3{font:700 clamp(1.6rem,4vw,2.4rem) var(--head);margin:0;color:var(--navy)}
-.ifs-review-window{margin:1.25rem 0;overflow-x:auto}
+.ifs-reviews{margin-top:56px;text-align:center}
+@media (min-width:900px){.ifs-reviews{margin-top:72px}}
+.ifs-reviews h3{font:700 clamp(1.6rem,4vw,2.3rem) var(--head);margin:0 0 .35em;color:var(--navy)}
+.ifs-reviews-sub{color:var(--muted);margin:0 auto;max-width:56ch}
+.ifs-rating{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 8px;margin-top:12px;font-weight:700;color:var(--navy)}
+.ifs-rating[hidden]{display:none}
+.ifs-stars{color:#F4B400;letter-spacing:2px;font-size:1.05rem}
+.ifs-review-window{margin:28px 0 20px;overflow-x:auto;padding-bottom:4px}
 .ifs-review-track,.ifs-review-set{display:flex;width:max-content}
-.ifs-review-set{gap:1rem;padding-right:1rem}
-.ifs-review{width:min(78vw,19rem);padding:1.3rem;text-align:left;border:1px solid var(--line);border-radius:14px;background:#fff}
-.ifs-review h4{margin:0;color:var(--navy)}
-.ifs-review small{color:var(--muted)}
-.ifs-review p{margin:.7rem 0 0}
+.ifs-review-set{gap:16px;padding-right:16px}
+.ifs-review{display:flex;flex-direction:column;gap:4px;width:min(78vw,20rem);padding:22px;text-align:left;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:0 2px 8px rgba(11,42,91,.05)}
+.ifs-review h4{margin:0;font-size:1.05rem;color:var(--navy)}
+.ifs-review small{color:var(--muted);font-size:.88rem}
+.ifs-review .ifs-stars{font-size:.95rem}
+.ifs-review p{margin:8px 0 0;font-size:1rem;color:var(--ink)}
 .ifs-review-copy{display:none}
-.ifs-reviews button{padding:.5rem .8rem;margin-right:.8rem;border:1px solid var(--line);border-radius:8px;background:white;color:var(--navy);font:inherit;cursor:pointer}
+.ifs-review-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 20px}
+.ifs-reviews button{padding:10px 16px;min-height:44px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--navy);font:600 .95rem var(--body);cursor:pointer}
+.ifs-review-attrib{margin:16px 0 0;font-size:.82rem;color:var(--muted)}
 @keyframes ifs-review-scroll{to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:no-preference){
 .ifs-moving .ifs-review-window{overflow:hidden}
@@ -581,13 +589,17 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
     </div>
     <div id="google-reviews" class="ifs-reviews">
       <h3>Google reviews of IFS Vizag</h3>
-      <p>Highlights from student reviews published on Trustindex.</p>
+      <p class="ifs-reviews-sub" id="reviews-sub">Highlights from student reviews published on Trustindex.</p>
+      <p class="ifs-rating" id="reviews-rating" hidden><span class="ifs-stars" aria-hidden="true">★★★★★</span><span id="reviews-rating-text"></span></p>
       <div class="ifs-review-window"><div class="ifs-review-track">
-        <div class="ifs-review-set"><article class="ifs-review"><h4>Sayak Chakraborty</h4><small>1 August 2025</small><p>Sayak appreciated the patient guidance he received while choosing universities and preparing for his visa.</p></article><article class="ifs-review"><h4>Yasaswini Yashu</h4><small>29 July 2025</small><p>Yasaswini highlighted the help with shortlisting, payments and keeping track of university emails.</p></article><article class="ifs-review"><h4>Mohammad Sufiyaan Khan</h4><small>30 July 2025</small><p>Mohammad valued course recommendations that took his academic background and career goals into account.</p></article><article class="ifs-review"><h4>Vishal Reddy</h4><small>13 June 2025</small><p>Vishal described how regular follow-ups and practice interviews helped him feel more confident.</p></article></div>
-        <div class="ifs-review-set ifs-review-copy" aria-hidden="true"><article class="ifs-review"><h4>Sayak Chakraborty</h4><small>1 August 2025</small><p>Sayak appreciated the patient guidance he received while choosing universities and preparing for his visa.</p></article><article class="ifs-review"><h4>Yasaswini Yashu</h4><small>29 July 2025</small><p>Yasaswini highlighted the help with shortlisting, payments and keeping track of university emails.</p></article><article class="ifs-review"><h4>Mohammad Sufiyaan Khan</h4><small>30 July 2025</small><p>Mohammad valued course recommendations that took his academic background and career goals into account.</p></article><article class="ifs-review"><h4>Vishal Reddy</h4><small>13 June 2025</small><p>Vishal described how regular follow-ups and practice interviews helped him feel more confident.</p></article></div>
+        <div class="ifs-review-set" id="reviews-set"><article class="ifs-review"><h4>Sayak Chakraborty</h4><small>1 August 2025</small><p>Sayak appreciated the patient guidance he received while choosing universities and preparing for his visa.</p></article><article class="ifs-review"><h4>Yasaswini Yashu</h4><small>29 July 2025</small><p>Yasaswini highlighted the help with shortlisting, payments and keeping track of university emails.</p></article><article class="ifs-review"><h4>Mohammad Sufiyaan Khan</h4><small>30 July 2025</small><p>Mohammad valued course recommendations that took his academic background and career goals into account.</p></article><article class="ifs-review"><h4>Vishal Reddy</h4><small>13 June 2025</small><p>Vishal described how regular follow-ups and practice interviews helped him feel more confident.</p></article></div>
+        <div class="ifs-review-set ifs-review-copy" id="reviews-copy" aria-hidden="true"><article class="ifs-review"><h4>Sayak Chakraborty</h4><small>1 August 2025</small><p>Sayak appreciated the patient guidance he received while choosing universities and preparing for his visa.</p></article><article class="ifs-review"><h4>Yasaswini Yashu</h4><small>29 July 2025</small><p>Yasaswini highlighted the help with shortlisting, payments and keeping track of university emails.</p></article><article class="ifs-review"><h4>Mohammad Sufiyaan Khan</h4><small>30 July 2025</small><p>Mohammad valued course recommendations that took his academic background and career goals into account.</p></article><article class="ifs-review"><h4>Vishal Reddy</h4><small>13 June 2025</small><p>Vishal described how regular follow-ups and practice interviews helped him feel more confident.</p></article></div>
       </div></div>
-      <button type="button" id="review-motion" hidden>Pause scrolling</button>
-      <a href="https://www.trustindex.io/reviews/www.ifsconsultants.in" target="_blank" rel="noopener">Read the full reviews on Trustindex</a>
+      <div class="ifs-review-actions">
+        <button type="button" id="review-motion" hidden>Pause scrolling</button>
+        <a id="reviews-link" href="https://www.trustindex.io/reviews/www.ifsconsultants.in" target="_blank" rel="noopener">Read the full reviews on Trustindex</a>
+      </div>
+      <p class="ifs-review-attrib" id="reviews-attrib" hidden>Reviews from Google</p>
     </div>
   </div>
 </section>
@@ -601,13 +613,13 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:8px}
     </div>
     <div class="faq">
       <details><summary>Am I eligible to study in the UK?</summary><div class="ans"><p>Eligibility depends on the course. Universities look at your academic results, English language ability and, for some courses, work experience or a portfolio. Share your profile and we will tell you which courses you can realistically apply for.</p></div></details>
-      <details><summary>How much does it cost?</summary><div class="ans"><p>Tuition fees vary by university, course and level, and you also need to budget for living costs, the visa fee and the Immigration Health Surcharge. We give you a clear cost estimate for each shortlisted university before you apply. </p></div></details>
+      <details><summary>How much does it cost?</summary><div class="ans"><p>Tuition fees vary by university, course and level, and you also need to budget for living costs, the visa fee and the Immigration Health Surcharge. We give you a clear cost estimate for each shortlisted university before you apply.</p></div></details>
       <details><summary>Can I get a scholarship?</summary><div class="ans"><p>Many UK universities offer merit-based and country-specific scholarships, usually as a reduction in tuition fees. Awards are competitive and not guaranteed. We help you identify the ones you qualify for and apply on time.</p></div></details>
       <details><summary>Do I need IELTS?</summary><div class="ans"><p>Most courses need proof of English. IELTS is widely accepted, and some universities accept other tests or, in certain cases, your previous English-medium results. Requirements differ by university, so we check them for your shortlist.</p></div></details>
       <details><summary>How does the Student visa process work?</summary><div class="ans"><p>Once you accept an offer and meet its conditions, the university issues a Confirmation of Acceptance for Studies (CAS). You then apply online for a Student visa and show you meet the financial and other requirements. We guide you through each step; visa decisions are made only by UK Visas and Immigration.</p></div></details>
       <details><summary>Can I work while studying?</summary><div class="ans"><p>Students on a Student visa studying at degree level can usually work up to 20 hours per week during term time and full-time during official university vacations. Self-employment and freelancing are not allowed. See <a href="#work">Study and work in the UK</a> for details.</p></div></details>
       <details><summary>Can I stay and work in the UK after I graduate?</summary><div class="ans"><p>Eligible graduates can apply for the Graduate Route. It currently lasts 2 years for applications made by 31 December 2026 and 18 months for applications made from 1 January 2027, with 3 years for PhD graduates. Rules can change, so always check the latest official guidance.</p></div></details>
-      <details><summary>Does IFS Consultants charge for counselling?</summary><div class="ans"><p>Your initial counselling session is free.  We explain any service charges clearly before you decide to proceed.</p></div></details>
+      <details><summary>Does IFS Consultants charge for counselling?</summary><div class="ans"><p>Your initial counselling session is free. We explain any service charges clearly before you decide to proceed.</p></div></details>
     </div>
   </div>
 </section>
@@ -876,6 +888,40 @@ var CONFIG = {
     const paused = section.classList.toggle("ifs-paused");
     button.textContent = paused ? "Resume scrolling" : "Pause scrolling";
   });
+
+  /* Live Google reviews from /api/reviews (netlify/functions/reviews.mjs).
+     If the function is not configured or fails, the reviews above stay as they are. */
+  function el(tag, text) { const e = document.createElement(tag); if (text) e.textContent = text; return e; }
+  function stars(n) { n = Math.round(n || 0); return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n); }
+  function card(r) {
+    const a = el("article"); a.className = "ifs-review";
+    a.appendChild(el("h4", r.author || "Google user"));
+    const s = el("span", stars(r.rating)); s.className = "ifs-stars"; s.setAttribute("aria-label", r.rating + " out of 5 stars"); a.appendChild(s);
+    if (r.date) a.appendChild(el("small", new Date(r.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })));
+    else if (r.relativeTime) a.appendChild(el("small", r.relativeTime));
+    let t = (r.text || "").trim(); if (t.length > 260) t = t.slice(0, 257).replace(/\s+\S*$/, "") + "…";
+    if (t) a.appendChild(el("p", t));
+    return a;
+  }
+  fetch("/api/reviews", { headers: { Accept: "application/json" } })
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .then(function (data) {
+      if (!data || !Array.isArray(data.reviews) || !data.reviews.length) return;
+      const set = document.getElementById("reviews-set"), copy = document.getElementById("reviews-copy");
+      set.replaceChildren(); copy.replaceChildren();
+      data.reviews.forEach(function (r) { set.appendChild(card(r)); copy.appendChild(card(r)); });
+      document.getElementById("reviews-sub").textContent = "The latest reviews from students and parents on Google.";
+      if (data.rating && data.total) {
+        document.getElementById("reviews-rating-text").textContent = data.rating.toFixed(1) + " out of 5 from " + data.total + " Google reviews";
+        document.getElementById("reviews-rating").hidden = false;
+      }
+      if (data.url) {
+        const link = document.getElementById("reviews-link");
+        link.href = data.url; link.textContent = "Read all reviews on Google";
+      }
+      document.getElementById("reviews-attrib").hidden = false;
+    })
+    .catch(function () {});
 })();
 </script>
 </body>
