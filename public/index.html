@@ -119,7 +119,7 @@ input:focus,select:focus{border-color:var(--blue);outline:3px solid rgba(31,95,1
 .err{color:var(--error);font-size:.88rem;margin-top:4px;min-height:0;font-weight:600}
 .check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.9rem;color:var(--ink);margin-bottom:8px}
 .check input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--navy)}
-.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+.hp{display:none!important}
 .form-note{font-size:.82rem;color:var(--muted);margin:10px 0 0;text-align:center}
 .form-status{margin-top:12px;font-weight:700;color:var(--error)}
 .success{text-align:center;padding:18px 4px}
@@ -420,7 +420,7 @@ details .ans{overflow:hidden}
       <div id="formWrap">
         <h2 id="formTitle">Get your free UK study plan</h2>
         <p class="form-intro">Takes about a minute. A counsellor will contact you within 1 working day.</p>
-        <form name="uk-2027-enquiry" method="POST" action="/" data-netlify="true" netlify-honeypot="company_website" id="leadForm" novalidate aria-labelledby="formTitle">
+        <form name="uk-2027-enquiry" method="POST" action="/" data-netlify="true" netlify-honeypot="bot_trap_x7" id="leadForm" novalidate aria-labelledby="formTitle">
           <input type="hidden" name="form-name" value="uk-2027-enquiry">
           <input type="hidden" name="phone_full" value="">
           <input type="hidden" name="page" value="UK 2027 campaign landing page">
@@ -531,8 +531,8 @@ details .ans{overflow:hidden}
 
           <!-- Spam honeypot: hidden from people, bots tend to fill it. Leave empty. -->
           <div class="hp" aria-hidden="true">
-            <label for="company_website">Leave this field empty</label>
-            <input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off">
+            <label for="bot_trap_x7">Leave this field empty</label>
+            <input type="text" id="bot_trap_x7" name="bot_trap_x7" tabindex="-1" autocomplete="off">
           </div>
 
           <!-- Hidden attribution fields (filled automatically by the script) -->
@@ -962,35 +962,51 @@ var CONFIG = {
   });
 
   var submissionId;
+  function newId() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0; return (c === "x" ? r : (r & 3 | 8)).toString(16);
+    });
+  }
+  function fail(reason) {
+    btn.disabled = false; configureAppointment();
+    status.textContent = "We could not confirm your enquiry. Please retry, or call +91 70363 19256. (" + reason + ")";
+  }
   form.addEventListener("submit", function (e) {
     e.preventDefault(); if (btn.disabled) return; status.textContent = "";
-    var firstBad = null;
-    Object.keys(rules).forEach(function (id) { if (!check(id) && !firstBad) firstBad = $(id); });
-    if (firstBad) { firstBad.focus(); return; }
-    if ($("company_website").value) { return; } // honeypot tripped: pretend success, send nothing
+    try {
+      var firstBad = null;
+      Object.keys(rules).forEach(function (id) { if (!check(id) && !firstBad) firstBad = $(id); });
+      if (firstBad) {
+        status.textContent = "Please correct the highlighted fields above.";
+        firstBad.scrollIntoView({ block: "center" }); firstBad.focus({ preventScroll: true });
+        return;
+      }
+      var trapped = !!$("bot_trap_x7").value;
 
-    $("submitted_at").value = new Date().toISOString();
-    var data = {};
-    new FormData(form).forEach(function (v, k) { data[k] = v; });
-    var cc = $("cc").value;
-    data.phone_full = (cc === "other" ? "" : cc) + data.phone.replace(/[^\d+]/g, "");
-    data.consent_marketing = $("marketing").checked ? "yes" : "no";
-    data.page = "UK 2027 campaign landing page";
+      $("submitted_at").value = new Date().toISOString();
+      var data = {};
+      new FormData(form).forEach(function (v, k) { data[k] = v; });
+      var cc = $("cc").value;
+      data.phone_full = (cc === "other" ? "" : cc) + String(data.phone || "").replace(/[^\d+]/g, "");
+      data.consent_marketing = $("marketing").checked ? "yes" : "no";
+      data.page = "UK 2027 campaign landing page";
 
-    submissionId = submissionId || crypto.randomUUID();
-    data.submission_id = submissionId;
-    var requestedTime = wantsAppointment() ? $("appointmentTime").value : "";
-    btn.disabled = true; btn.textContent = "Sending…";
-    fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(data).toString() })
-      .then(function (r) {
-        if (!r.ok) throw new Error("error " + r.status);
-        showSuccess(requestedTime);
-        fireConversion();
-      })
-      .catch(function (err) {
-        btn.disabled = false; configureAppointment();
-        status.textContent = "We could not confirm your enquiry. Please retry, or call +91 70363 19256. (" + (err && err.message ? err.message : "network error") + ")";
-      });
+      submissionId = submissionId || newId();
+      data.submission_id = submissionId;
+      var requestedTime = wantsAppointment() ? $("appointmentTime").value : "";
+      if (trapped) { showSuccess(requestedTime); return; } // bot filled the hidden field: show thanks, send nothing
+      btn.disabled = true; btn.textContent = "Sending…";
+      fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(data).toString() })
+        .then(function (r) {
+          if (!r.ok) throw new Error("error " + r.status);
+          try { showSuccess(requestedTime); } catch (err) { $("formWrap").hidden = true; $("formSuccess").hidden = false; }
+          try { fireConversion(); } catch (err) { /* tracking must never block the thank-you */ }
+        })
+        .catch(function (err) { fail(err && err.message ? err.message : "network error"); });
+    } catch (err) {
+      fail("page error: " + (err && err.message ? err.message : err));
+    }
   });
 
   function showSuccess(requestedTime) {
